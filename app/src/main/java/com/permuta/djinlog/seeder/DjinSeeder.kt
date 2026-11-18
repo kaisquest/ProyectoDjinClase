@@ -35,3 +35,16 @@ enum class TipoDjin {
     EARTH
 
 }
+
+
+fun getDjinnFiltered(filter: String): List<DjinModel> {
+
+    return listaDjin.filter { it.nombre.contains(filter) }
+
+}
+
+fun getDjinn(id: Int): DjinModel? {
+    return listaDjin.find { it.id == id }
+
+
+}

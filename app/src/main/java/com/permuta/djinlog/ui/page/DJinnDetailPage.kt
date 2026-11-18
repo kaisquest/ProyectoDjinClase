@@ -17,6 +17,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,7 +30,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.permuta.djinlog.R
+import com.permuta.djinlog.seeder.TipoDjin
+import com.permuta.djinlog.viewmodel.DjinnDetailVM
 
 
 data class DJinnDetailData(
@@ -42,7 +48,25 @@ data class DJinnDetailData(
 
 
 @Composable
-fun DJinnDetailPage(data: DJinnDetailData, modifier: Modifier = Modifier) {
+fun DJinnDetailPage(
+    id: Int, modifier: Modifier = Modifier,
+    vm: DjinnDetailVM = viewModel()
+) {
+
+    val state by vm.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+
+        vm.load(id)
+    }
+
+    if (state.djinn == null){
+        Text(stringResource(R.string.djinn_no_encontrado))
+        return
+    }
+
+
+
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,12 +76,28 @@ fun DJinnDetailPage(data: DJinnDetailData, modifier: Modifier = Modifier) {
             .padding(16.dp)
     ) {
         Image(
-            painter = painterResource(data.imageId),
+            painter = painterResource(
+                when (state.djinn!!.tipo) {
+                    TipoDjin.FIRE -> R.drawable.fire
+                    TipoDjin.AIR -> R.drawable.wind
+                    TipoDjin.WATER -> R.drawable.water
+                    TipoDjin.EARTH -> R.drawable.earth
+                }
+            ),
             contentDescription = stringResource(R.string.imagen_djinn),
             modifier = Modifier
                 .size(200.dp)
                 .clip(CircleShape)
-                .border(border = BorderStroke(4.dp, data.color), CircleShape)
+                .border(
+                    border = BorderStroke(
+                        4.dp, when (state.djinn!!.tipo) {
+                            TipoDjin.FIRE -> Color.Red
+                            TipoDjin.AIR -> Color.Cyan
+                            TipoDjin.WATER -> Color.Blue
+                            TipoDjin.EARTH -> Color.Green
+                        }
+                    ), CircleShape
+                )
                 .background(Color.White)
         )
 
@@ -66,12 +106,19 @@ fun DJinnDetailPage(data: DJinnDetailData, modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Text(
-                text = data.name,
+                text = state.djinn!!.nombre,
                 fontWeight = FontWeight.Bold,
                 fontSize = 32.sp
             )
             Icon(
-                painter = painterResource(data.iconId),
+                painter = painterResource(
+                    when (state.djinn!!.tipo) {
+                        TipoDjin.FIRE -> R.drawable.fire_icon
+                        TipoDjin.AIR -> R.drawable.wind_icon
+                        TipoDjin.WATER -> R.drawable.water_icon
+                        TipoDjin.EARTH -> R.drawable.earth_icon
+                    }
+                ),
                 contentDescription = stringResource(R.string.icon_djinn),
                 tint = Color.Unspecified,
                 modifier = Modifier.size(32.dp)
@@ -79,13 +126,13 @@ fun DJinnDetailPage(data: DJinnDetailData, modifier: Modifier = Modifier) {
         }
 
         Text(
-            text = data.element,
+            text = state.djinn!!.tipo.toString(),
             fontSize = 16.sp,
             color = Color.Gray
         )
 
         Text(
-            text = data.description,
+            text = state.djinn!!.descripcion,
             fontSize = 16.sp,
             modifier = Modifier.fillMaxWidth()
         )
@@ -96,16 +143,7 @@ fun DJinnDetailPage(data: DJinnDetailData, modifier: Modifier = Modifier) {
 @Composable
 fun DJinnDetailPagePreview() {
     MaterialTheme {
-        DJinnDetailPage(
-            data = DJinnDetailData(
-                id = 1,
-                name = "Ignis",
-                element = "Fire",
-                color = Color(0xFFE53935),
-                description = "Este djinn es raro, parece un charmander",
-                imageId = R.drawable.fire,
-                iconId = R.drawable.fire_icon
-            )
-        )
+        DJinnDetailPage(6)
+
     }
 }
