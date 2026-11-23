@@ -21,14 +21,16 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.permuta.djinlog.R
 import com.permuta.djinlog.seeder.TipoDjin
-import com.permuta.djinlog.seeder.listaDjin
 import com.permuta.djinlog.ui.component.HorizontalCard
 import com.permuta.djinlog.ui.component.HorizontalCardData
 import com.permuta.djinlog.viewmodel.DJinnViewModel
 
 
 @Composable
-fun DJiinListPage(vm: DJinnViewModel = viewModel()) {
+fun DJinnListPage(
+    onCardClick: (Int) -> Unit,
+    vm: DJinnViewModel = viewModel()
+) {
 
     val state by vm.uiState.collectAsState()
     //La función load del viewmodel siempre va rodeado de un LaunchedEffect, porque así no está
@@ -93,8 +95,8 @@ fun DJiinListPage(vm: DJinnViewModel = viewModel()) {
 
 @Preview(backgroundColor = 0xFFF0EAE2, showBackground = true)
 @Composable
-fun DJiinListPagePreview() {
+fun DJinnListPagePreview() {
     MaterialTheme() {
-        DJiinListPage()
+        DJinnListPage(onCardClick = {})
     }
 }

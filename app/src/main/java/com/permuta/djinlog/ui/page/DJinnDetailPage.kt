@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -50,6 +51,7 @@ data class DJinnDetailData(
 @Composable
 fun DJinnDetailPage(
     id: Int, modifier: Modifier = Modifier,
+    onGoBack: () -> Unit,
     vm: DjinnDetailVM = viewModel()
 ) {
 
@@ -136,6 +138,10 @@ fun DJinnDetailPage(
             fontSize = 16.sp,
             modifier = Modifier.fillMaxWidth()
         )
+
+        Button(onClick = onGoBack) {
+            Text(text = stringResource(R.string.volver))
+        }
     }
 }
 
@@ -143,7 +149,7 @@ fun DJinnDetailPage(
 @Composable
 fun DJinnDetailPagePreview() {
     MaterialTheme {
-        DJinnDetailPage(6)
+        DJinnDetailPage(6, onGoBack = {})
 
     }
 }

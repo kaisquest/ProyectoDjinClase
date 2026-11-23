@@ -23,15 +23,15 @@ class DjinnDetailVM : ViewModel() {
     fun load(id: Int) {
         val djinn = getDjinn(id)
 
-        _uiState.value = _uiState.value.copy(
-            djinn = if djinn == null {
-                _uiState.value = _uiState.value.copy(
-                    errorMsg = "No se encontró el Djinn."
-                )
-            } else {
-                djinn
-            }
-        )
+      //  _uiState.value = _uiState.value.copy(
+      //      djinn = if djinn == null {
+      //          _uiState.value = _uiState.value.copy(
+      //              errorMsg = "No se encontró el Djinn."
+      //          )
+      //      } else {
+      //          djinn
+      //      }
+      //  )
 
 
     }

@@ -4,4 +4,5 @@
     <string name="icon_djinn">Djinn Icon</string>
     <string name="buscar_djinn">Buscar djinn...</string>
     <string name="djinn_no_encontrado">Djinn no encontrado ... Todavía</string>
+    <string name="volver">Volver</string>
 </resources>
